@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NewMessage extends StatefulWidget {
@@ -10,13 +11,13 @@ class _NewMessageState extends State<NewMessage> {
   var _enteredMessage = '';
   final _newMessageController = TextEditingController();
 
-  void _sendMessage() {
+  void _sendMessage() async {
     FocusScope.of(context).unfocus();
     _newMessageController.clear();
     Firestore.instance.collection('chat').add({
       'text': _enteredMessage,
       'createdAt': Timestamp.now(),
-      // 'userId':FirebaseAuth.instance.currentUser()
+      'userId': (await FirebaseAuth.instance.currentUser()).uid
     });
   }
 
