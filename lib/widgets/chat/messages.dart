@@ -25,9 +25,8 @@ class Messages extends StatelessWidget {
                           // itemBuilder: (_, index) =>
                           //     Text(chatSnapshot.data.documents[index]['text']),
                           itemBuilder: (_, index) => MessageBubble(
-                            chatSnapshot.data.documents[index]['text'],
-                            chatSnapshot.data.documents[index]['userId'] ==
-                                snapshot.data.uid,
+                            chatSnapshot.data.documents[index],
+                            snapshot.data.uid,
                             key: ValueKey(
                                 chatSnapshot.data.documents[index].documentID),
                           ),
@@ -39,12 +38,14 @@ class Messages extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  final String message;
-  final bool isMe;
+  final DocumentSnapshot messageDocument;
+  final String userId;
+
+  bool get isMe => messageDocument['userId'] == userId;
 
   const MessageBubble(
-    this.message,
-    this.isMe, {
+    this.messageDocument,
+    this.userId, {
     Key key,
   }) : super(key: key);
 
@@ -65,12 +66,27 @@ class MessageBubble extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           width: 140,
           margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-          child: Text(
-            message,
-            style: TextStyle(
-                color: isMe
-                    ? Colors.black
-                    : Theme.of(context).accentTextTheme.headline1.color),
+          child: Column(
+            crossAxisAlignment:
+                isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: [
+              Text(
+                messageDocument['username'],
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: isMe
+                        ? Colors.black
+                        : Theme.of(context).accentTextTheme.headline1.color),
+              ),
+              Text(
+                messageDocument['text'],
+                textAlign: isMe ? TextAlign.end : TextAlign.start,
+                style: TextStyle(
+                    color: isMe
+                        ? Colors.black
+                        : Theme.of(context).accentTextTheme.headline1.color),
+              ),
+            ],
           ),
         ),
       ],
