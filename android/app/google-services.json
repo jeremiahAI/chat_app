@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "104695736088",
+    "firebase_url": "https://flutter-chat-888d2.firebaseio.com",
+    "project_id": "flutter-chat-888d2",
+    "storage_bucket": "flutter-chat-888d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104695736088:android:240ad04221bce0dd46206d",
+        "android_client_info": {
+          "package_name": "com.jeremiahai.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "104695736088-73tku7gm4cfbceuvc1abni9209tkq5uc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE_XpFEzTdr17tQM2t01K-NFt6eVksI6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "104695736088-73tku7gm4cfbceuvc1abni9209tkq5uc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
