@@ -14,10 +14,41 @@ class Messages extends StatelessWidget {
               ? Center(child: CircularProgressIndicator())
               : ListView.builder(
                   reverse: true,
+                  // itemBuilder: (_, index) =>
+                  //     Text(chatSnapshot.data.documents[index]['text']),
                   itemBuilder: (_, index) =>
-                      Text(chatSnapshot.data.documents[index]['text']),
+                      MessageBubble(chatSnapshot.data.documents[index]['text']),
                   itemCount: chatSnapshot.data.documents.length,
                 ),
+    );
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  final String message;
+  const MessageBubble(
+    this.message, {
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              color: Theme.of(context).accentColor,
+              borderRadius: BorderRadius.circular(12)),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          width: 140,
+          margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+          child: Text(
+            message,
+            style: TextStyle(
+                color: Theme.of(context).accentTextTheme.headline1.color),
+          ),
+        ),
+      ],
     );
   }
 }
