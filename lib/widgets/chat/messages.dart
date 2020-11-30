@@ -51,42 +51,62 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+    return Stack(
+      overflow: Overflow.visible,
       children: [
-        Container(
-          decoration: BoxDecoration(
-              color: isMe ? Colors.grey[300] : Theme.of(context).accentColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-                bottomLeft: Radius.circular(!isMe ? 0 : 12),
-                bottomRight: Radius.circular(isMe ? 0 : 12),
-              )),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-          width: 140,
-          margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-          child: Column(
-            crossAxisAlignment:
-                isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-            children: [
-              Text(
-                messageDocument['username'],
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: isMe
-                        ? Colors.black
-                        : Theme.of(context).accentTextTheme.headline1.color),
+        Row(
+          mainAxisAlignment:
+              isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color:
+                      isMe ? Colors.grey[300] : Theme.of(context).accentColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                    bottomLeft: Radius.circular(!isMe ? 0 : 12),
+                    bottomRight: Radius.circular(isMe ? 0 : 12),
+                  )),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              width: 140,
+              margin: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+              child: Column(
+                crossAxisAlignment:
+                    isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    messageDocument['username'],
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: isMe
+                            ? Colors.black
+                            : Theme.of(context)
+                                .accentTextTheme
+                                .headline1
+                                .color),
+                  ),
+                  Text(
+                    messageDocument['text'],
+                    textAlign: isMe ? TextAlign.end : TextAlign.start,
+                    style: TextStyle(
+                        color: isMe
+                            ? Colors.black
+                            : Theme.of(context)
+                                .accentTextTheme
+                                .headline1
+                                .color),
+                  ),
+                ],
               ),
-              Text(
-                messageDocument['text'],
-                textAlign: isMe ? TextAlign.end : TextAlign.start,
-                style: TextStyle(
-                    color: isMe
-                        ? Colors.black
-                        : Theme.of(context).accentTextTheme.headline1.color),
-              ),
-            ],
+            ),
+          ],
+        ),
+        Positioned(
+          left: !isMe ? 120 : null,
+          right: isMe ? 120 : null,
+          child: CircleAvatar(
+            backgroundImage: NetworkImage(messageDocument['userImage']),
           ),
         ),
       ],
