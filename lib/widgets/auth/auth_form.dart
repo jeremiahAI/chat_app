@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   final void Function(String email, String password, String username,
-      bool isLogin, BuildContext context) submitAuthForm;
+      File pickedImage, bool isLogin, BuildContext context) submitAuthForm;
   bool isLoading;
 
   AuthForm(this.submitAuthForm, this.isLoading);
@@ -18,10 +21,20 @@ class _AuthFormState extends State<AuthForm> {
   String username = '';
   String password = '';
 
+  File _pickedImage;
+
   _trySubmit() {
     final isValid = _formKey.currentState.validate();
 
     FocusScope.of(context).unfocus();
+
+    if (_pickedImage == null && !_isLogin) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("Please select an image."),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+      return;
+    }
 
     if (!isValid) return;
 
@@ -31,10 +44,13 @@ class _AuthFormState extends State<AuthForm> {
       email.trim(),
       password.trim(),
       username.trim(),
+      _pickedImage,
       _isLogin,
       context,
     );
   }
+
+  _pickImage(File imageFile) => _pickedImage = imageFile;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +65,7 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (!_isLogin) UserImagePicker(_pickImage),
                   TextFormField(
                     key: ValueKey('email'),
                     keyboardType: TextInputType.emailAddress,
@@ -112,6 +129,52 @@ class _AuthFormState extends State<AuthForm> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class UserImagePicker extends StatefulWidget {
+  final Function(File imageFile) submitPickedImage;
+
+  UserImagePicker(this.submitPickedImage);
+
+  @override
+  _UserImagePickerState createState() => _UserImagePickerState();
+}
+
+class _UserImagePickerState extends State<UserImagePicker> {
+  File _pickedImage;
+
+  _pickImage() async {
+    final imageFile = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 50,
+      maxWidth: 150,
+    );
+
+    setState(() {
+      _pickedImage = imageFile;
+    });
+    widget.submitPickedImage(imageFile);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 40,
+          backgroundColor: Colors.grey,
+          backgroundImage:
+              _pickedImage != null ? FileImage(_pickedImage) : null,
+        ),
+        FlatButton.icon(
+          icon: Icon(Icons.image),
+          onPressed: _pickImage,
+          label: Text("Add Image"),
+          textColor: Theme.of(context).primaryColor,
+        )
+      ],
     );
   }
 }
